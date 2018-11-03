@@ -1,0 +1,60 @@
+$BRIDGE_IF        = ENV['BRIDGE_IF'] || "Default Switch"
+$BASE_BOX         = ENV['BASE_BOX']  || "./Win_Srv_STD_2016_English_hyperv.box"
+$BASE_BOX_CORE    = ENV['BASE_BOX']  || "./Win_Srv_STD_CORE_2016_English_hyperv.box"
+
+Vagrant.configure("2") do |config|
+
+
+  def create_win_host(config, hostname, box, modules, ip)
+    config.vm.define hostname do |host|
+      host.vm.box = box
+      host.vm.hostname = hostname
+      host.vm.network "private_network", bridge: $BRIDGE_IF
+      host.vm.guest = :windows
+      host.vm.communicator = "winrm"
+      host.vm.boot_timeout = 300
+
+      # System Administrator Credentials
+      host.winrm.username = "administrator"
+      host.winrm.password = "password"
+
+      # Disabling Shared Folders
+      host.vm.synced_folder ".", "/vagrant", disabled: true
+
+      # Install Module Dependencies
+      modules.each do |m|
+        host.vm.provision "file", source: "./Modules/#{m}/", destination: "C:/Program Files/WindowsPowerShell/Modules/#{m}"
+      end
+
+      # Initialize DSC Configuration and Generate MOF file
+      host.vm.provision "shell" do |s|
+        s.path = "Scripts/Set-VMConfiguration.ps1"
+        s.args = [hostname, ip]
+      end
+
+      # Apply DSC Configuration
+      host.vm.provision "shell" do |s|
+        s.inline = "Start-DSCConfiguration -Path 'C:/tmp/MOF/' -Force"
+      end
+
+      # Set Vm Configuration
+      host.vm.provider 'hyperv' do |hv|
+        hv.ip_address_timeout = 240
+        hv.memory = 512
+        hv.maxmemory = 2048
+        hv.linked_clone = true
+      end
+    end
+  end
+
+  for host_number in 1..2
+    hostname="SRV-DC-#{host_number}"
+    clientIp="172.16.10.1#{host_number}"
+
+    modules = [ "NetworkingDsc", "ComputerManagementDsc" ]
+    create_win_host config, hostname, $BASE_BOX_CORE, modules, clientIp
+  end
+
+  modules = [ "NetworkingDsc", "ComputerManagementDsc" ]
+  create_win_host config, "SRV-ADMIN", $BASE_BOX, modules, "172.16.10.15"
+end
