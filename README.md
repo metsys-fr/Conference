@@ -8,4 +8,4 @@ Please add a folder with your name, and then make a folder below that for each o
 
 | Speaker       | Title                                                                                                                                          | Audience   |
 |---------------|------------------------------------------------------------------------------------------------------------------------------------------------|------------|
-| Thomas ILLIET | [Débuter avec Powershell DSC](https://github.com/metsys-fr/Conference/tree/master/2018/Thomas%20ILLIET/D%C3%A9buter%20avec%20Powershell%20DSC) | PowerShell |
+| Thomas ILLIET | [Débuter avec Powershell DSC](2018/Thomas_ILLIET/Debuter_avec_Powershell_DSC/) | PowerShell |
