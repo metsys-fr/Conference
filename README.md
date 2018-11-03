@@ -6,6 +6,6 @@ Click the speaker's name to see session materials (demo code, slide) and the tit
 
 Please add a folder with your name, and then make a folder below that for each of your sessions, putting the all of the demos for each session into a .zip file.
 
-| Speaker       | Title                                                                                                                                          | Audience   |
-|---------------|------------------------------------------------------------------------------------------------------------------------------------------------|------------|
-| Thomas ILLIET | [Débuter avec Powershell DSC](2018/Thomas_ILLIET/Debuter_avec_Powershell_DSC/) | PowerShell |
+| Conference                                        | Speaker       | Title                                                                          | Audience   |
+| ------------------------------------------------- | ------------- | ------------------------------------------------------------------------------ | ---------- |
+| [Modern workplace](https://modern-workplace.pro/) | Thomas ILLIET | [Débuter avec Powershell DSC](2018/Thomas_ILLIET/Debuter_avec_Powershell_DSC/) | PowerShell |
